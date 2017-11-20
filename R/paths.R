@@ -61,9 +61,9 @@ bundles_dir <- function(project = NULL) {
 
 getProjectDir <- function(project = NULL) {
   force(project)
-  message("getProjectDir: project: ": project)
+  message("getProjectDir: project: ": class(project), " l:", length(project))
 
-  if (!is.null(project))
+  if (!is.null(project) && length(project) > 0)
     return(normalizePath(project, winslash = "/", mustWork = TRUE))
 
   message("getProjectDir: getwd(): ": getwd())

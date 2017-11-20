@@ -389,6 +389,8 @@ installPkg <- function(pkgRecord,
                        repos,
                        lib = libDir(project))
 {
+  message("installPkg: Start.")
+
   pkgSrc <- NULL
   type <- "built source"
   needsInstall <- TRUE
@@ -418,6 +420,8 @@ installPkg <- function(pkgRecord,
     }, add = TRUE)
 
   }
+
+  message("installPkg: Try restoring the package from the global cache.")
 
   # Try restoring the package from the global cache.
   cacheCopyStatus <- new.env(parent = emptyenv())
@@ -449,6 +453,8 @@ installPkg <- function(pkgRecord,
         file.rename(pkgRenamePath, pkgInstallPath)
     }, add = TRUE)
   }
+
+  message("installPkg: Try downloading a binary.")
 
   # Try downloading a binary (when appropriate).
   if (!(copiedFromCache || copiedFromUntrustedCache) &&
@@ -487,6 +493,8 @@ installPkg <- function(pkgRecord,
   }
 
   if (is.null(pkgSrc)) {
+    message("installPkg: use cache tarball.")
+
     # When installing from github or an older version, use the cached source
     # tarball or zip created in snapshotSources
     pkgSrc <- file.path(srcDir(project), pkgRecord$name,
@@ -494,6 +502,7 @@ installPkg <- function(pkgRecord,
   }
 
   if (needsInstall) {
+    message("installPkg: Needs install.")
 
     if (!file.exists(pkgSrc)) {
       # If the source file is missing, try to download it. (Could happen in the
@@ -537,10 +546,16 @@ installPkg <- function(pkgRecord,
 
   # copy package into cache if enabled
   if (isUsingCache(project)) {
+    message("installPkg: Is using cache.")
+
     pkgPath <- file.path(lib, pkgRecord$name)
+
+    message("installPkg: Copy into global cache if this is a trusted package.")
 
     # copy into global cache if this is a trusted package
     if (isTrustedPackage(pkgRecord$name)) {
+      message("installPkg: Is trusted package.")
+
       descPath <- file.path(pkgPath, "DESCRIPTION")
       if (!file.exists(descPath)) {
         warning("cannot cache package: no DESCRIPTION file at path '", descPath, "'")
@@ -553,6 +568,8 @@ installPkg <- function(pkgRecord,
         )
       }
     } else {
+      message("installPkg: Is not trusted package.")
+
       pkgPath <- file.path(lib, pkgRecord$name)
       tarballName <- pkgSrcFilename(pkgRecord)
       tarballPath <- file.path(srcDir(project), pkgRecord$name, tarballName)

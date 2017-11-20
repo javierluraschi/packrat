@@ -176,6 +176,7 @@ with_envvar <- function(new, code, action = "replace") {
 }
 
 install_local_path <- function(path, subdir = NULL, ...) {
+  message("install_local_path: start")
   invisible(lapply(path, install_local_path_single, subdir = subdir, ...))
 }
 

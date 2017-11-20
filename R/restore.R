@@ -545,7 +545,7 @@ installPkg <- function(pkgRecord,
 
       message("installPkg: Install local path: ", pkgSrc)
 
-      quiet <- TRUE # isTRUE(packrat::opts$quiet.package.installation())
+      quiet <- isTRUE(packrat::opts$quiet.package.installation())
 
       message("installPkg: Quiet? ", quiet)
       install_local_path(path = pkgSrc, reload = FALSE,

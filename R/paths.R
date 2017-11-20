@@ -60,7 +60,7 @@ bundles_dir <- function(project = NULL) {
 # Internal Implementations ----
 
 getProjectDir <- function(project = NULL) {
-
+  force(project)
   if (!is.null(project))
     return(normalizePath(project, winslash = "/", mustWork = TRUE))
 

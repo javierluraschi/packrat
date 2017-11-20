@@ -505,6 +505,8 @@ installPkg <- function(pkgRecord,
     message("installPkg: Needs install.")
 
     if (!file.exists(pkgSrc)) {
+      message("installPkg: Source file is missing.")
+
       # If the source file is missing, try to download it. (Could happen in the
       # case where the packrat lockfile is present but cached sources are
       # missing.)
@@ -520,10 +522,14 @@ installPkg <- function(pkgRecord,
     }
 
     local({
+      message("installPkg: Try local.")
+
       # devtools does not install to any libraries other than the default, so
       # if the library we wish to install to is not the default, set as the
       # default while we do this operation.
       if (!isPathToSameFile(getLibPaths()[1], lib)) {
+        message("installPkg: Not path to same file.")
+
         oldLibPaths <- getLibPaths()
         on.exit(setLibPaths(oldLibPaths), add = TRUE)
         # Make sure the library actually exists, otherwise setLibPaths will silently
@@ -532,8 +538,12 @@ installPkg <- function(pkgRecord,
         setLibPaths(lib)
       }
 
+      message("installPkg: Detach Package For Installation If Necessary.")
+
       # on windows, we need to detach the package before installation
       detachPackageForInstallationIfNecessary(pkgRecord$name)
+
+      message("installPkg: Install local path.")
 
       quiet <- isTRUE(packrat::opts$quiet.package.installation())
       install_local_path(path = pkgSrc, reload = FALSE,
@@ -543,6 +553,8 @@ installPkg <- function(pkgRecord,
 
   # Annotate DESCRIPTION file so we know we installed it
   annotatePkgDesc(pkgRecord, project, lib)
+
+  message("installPkg: Is using cache?")
 
   # copy package into cache if enabled
   if (isUsingCache(project)) {

@@ -543,13 +543,15 @@ installPkg <- function(pkgRecord,
       # on windows, we need to detach the package before installation
       detachPackageForInstallationIfNecessary(pkgRecord$name)
 
-      message("installPkg: Install local path.")
+      message("installPkg: Install local path: ", pkgSrc)
 
       quiet <- isTRUE(packrat::opts$quiet.package.installation())
       install_local_path(path = pkgSrc, reload = FALSE,
                          dependencies = FALSE, quick = TRUE, quiet = quiet)
     })
   }
+
+  message("Annotate DESCRIPTION file")
 
   # Annotate DESCRIPTION file so we know we installed it
   annotatePkgDesc(pkgRecord, project, lib)

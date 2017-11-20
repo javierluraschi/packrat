@@ -180,10 +180,14 @@ install_local_path <- function(path, subdir = NULL, ...) {
 }
 
 install_local_path_single <- function(path, subdir = NULL, before_install = NULL, ..., quiet = FALSE) {
+  message("install_local_path_single: start:", path)
+
   stopifnot(file.exists(path))
   if (!quiet) {
     message("Installing package from '", path, "'")
   }
+
+  message("install_local_path_single: isdir?")
 
   if (!file.info(path)$isdir) {
     bundle <- path
@@ -194,6 +198,8 @@ install_local_path_single <- function(path, subdir = NULL, before_install = NULL
   }
 
   pkg_path <- if (is.null(subdir)) path else file.path(path, subdir)
+
+  message("install_local_path_single: Check it's an R package? ", pkg_path)
 
   # Check it's an R package
   if (!file.exists(file.path(pkg_path, "DESCRIPTION"))) {
@@ -206,14 +212,20 @@ install_local_path_single <- function(path, subdir = NULL, before_install = NULL
     Sys.chmod(config_path, "777")
   }
 
+  message("install_local_path_single: before_install")
+
   # Call before_install for bundles (if provided)
   if (!is.null(bundle) && !is.null(before_install))
     before_install(bundle, pkg_path)
+
+  message("install_local_path_single: Finally, run install")
 
   # Finally, run install
   with_build_tools({
     install(pkg_path, quiet = quiet, ...)
   })
+
+  message("install_local_path_single: end: ", path)
 }
 
 with_build_tools <- function(code) {

@@ -61,9 +61,12 @@ bundles_dir <- function(project = NULL) {
 
 getProjectDir <- function(project = NULL) {
   force(project)
+  message("getProjectDir: project: ": project)
+
   if (!is.null(project))
     return(normalizePath(project, winslash = "/", mustWork = TRUE))
 
+  message("getProjectDir: getwd(): ": getwd())
   packratOption(
     "R_PACKRAT_PROJECT_DIR",
     "packrat.project.dir",

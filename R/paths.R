@@ -63,11 +63,10 @@ getProjectDir <- function(project = NULL) {
   if (!is.null(project) && length(project) > 0)
     return(normalizePath(project, winslash = "/", mustWork = TRUE))
 
-  message("getProjectDir: getwd(): ": getwd())
   packratOption(
     "R_PACKRAT_PROJECT_DIR",
     "packrat.project.dir",
-    normalizePath(getwd(), winslash = "/", mustWork = TRUE)
+    if (length(getwd()) > 0) normalizePath(getwd(), winslash = "/", mustWork = TRUE) else ""
   )
 }
 

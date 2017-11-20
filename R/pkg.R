@@ -186,6 +186,8 @@ getPackageRecords <- function(pkgNames,
                               check.lockfile = FALSE,
                               fallback.ok = FALSE)
 {
+  message("getPackageRecords: ", paste(pkgNames, collapse = "-"))
+
   project <- getProjectDir(project)
   local.repos <- get_opts("local.repos", project = project)
 
